@@ -4,8 +4,8 @@ crane
 .. image:: https://travis-ci.org/aprajshekhar/crane.svg?branch=master
    :target: https://travis-ci.org/aprajshekhar/crane
 
-.. image:: https://coveralls.io/repos/pulp/crane/badge.png?branch=master
-   :target: https://coveralls.io/r/pulp/crane?branch=master
+.. image:: https://coveralls.io/repos/aprajshekhar/crane/badge.png?branch=master
+   :target: https://coveralls.io/r/aprajshekhar/crane?branch=master
 
 What is Crane?
 --------------
