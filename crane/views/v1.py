@@ -47,6 +47,7 @@ def ping():
     response.headers['X-Docker-Registry-Standalone'] = True
     return response
 
+
 @section.route('/users', methods=['GET', 'POST'])
 @section.route('/users/', methods=['GET', 'POST'])
 def users():
@@ -63,6 +64,7 @@ def users():
     response.headers['Content-Type'] = 'application/json'
     response.headers['X-Docker-Registry-Standalone'] = True
     return response
+
 
 @section.route('/repositories/<path:repo_id>/images')
 def repo_images(repo_id):
@@ -108,6 +110,30 @@ def repo_tags(repo_id):
     repo_id = app_util.validate_and_transform_repoid(repo_id)
 
     return repository.get_tags_for_repo(repo_id)
+
+
+@section.route('/repositories/<path:repo_id>/tags/latest')
+def repo_tags_latest(repo_id):
+    """
+    Returns a json containing an object that has image id associated with the tag
+    latest.
+
+    :param repo_id: unique ID for the repository. May contain 0 or 1 of the "/"
+                    character. For repo IDs that do not contain a slash, the
+                    docker client currently prepends "library/" when making
+                    this call. This function strips that off.
+    :type  repo_id: basestring
+
+    :return:    json string containing an object having image id associated with tag latest
+    :rtype:     basestring
+    """
+    repo_id = app_util.validate_and_transform_repoid(repo_id)
+
+    tags = repository.get_tags_for_repo(repo_id)
+    latest = json.loads(tags).get('latest')
+    if latest is None:
+        raise exceptions.HTTPError(httplib.NOT_FOUND)
+    return json.dumps(latest)
 
 
 @section.route('/search')
