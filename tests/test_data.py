@@ -15,12 +15,12 @@ def _reset_response_data():
     """
     reset response data
     """
-    data.response_data = \
+    data.v1_response_data = \
         {
             'repos': {},
             'images': {},
         }
-    data.response_data_v2 = \
+    data.v2_response_data = \
         {
             'repos': {}
         }
@@ -64,15 +64,15 @@ class TestLoadAll(unittest.TestCase):
         data.load_all(mock_app)
 
         # verify that images data is correct
-        self.assertTrue('abc123' in data.response_data['images'])
-        self.assertEqual(data.response_data['images']['abc123'], frozenset(['redhat/foo']))
-        self.assertTrue('xyz789' in data.response_data['images'])
-        self.assertEqual(data.response_data['images']['xyz789'], frozenset(['redhat/foo']))
+        self.assertTrue('abc123' in data.v1_response_data['images'])
+        self.assertEqual(data.v1_response_data['images']['abc123'], frozenset(['redhat/foo']))
+        self.assertTrue('xyz789' in data.v1_response_data['images'])
+        self.assertEqual(data.v1_response_data['images']['xyz789'], frozenset(['redhat/foo']))
 
         # make sure the Repo namedtuple is in the right place
-        self.assertTrue(isinstance(data.response_data['repos'].get('redhat/foo'), data.Repo))
+        self.assertTrue(isinstance(data.v1_response_data['repos'].get('redhat/foo'), data.V1Repo))
         # spot-check a value
-        self.assertEqual(data.response_data['repos'].get('redhat/foo').url,
+        self.assertEqual(data.v1_response_data['repos'].get('redhat/foo').url,
                          'http://cdn.redhat.com/foo/bar/images/')
 
     @mock.patch('os.walk', return_value=[
@@ -83,9 +83,9 @@ class TestLoadAll(unittest.TestCase):
         data.load_all(mock_app)
 
         # make sure the Repo namedtuple is in the right place
-        self.assertTrue(isinstance(data.response_data_v2['repos'].get('bar'), data.Repo_v2))
+        self.assertTrue(isinstance(data.v2_response_data['repos'].get('bar'), data.V2Repo))
         # spot-check a value
-        self.assertEqual(data.response_data_v2['repos'].get('bar').url,
+        self.assertEqual(data.v2_response_data['repos'].get('bar').url,
                          'http://cdn.redhat.com/bar/baz/images')
 
     @mock.patch.object(data.logger, 'error', spec_set=True)
@@ -97,23 +97,22 @@ class TestLoadAll(unittest.TestCase):
         data.load_all(mock_app)
 
         # make sure the response data was not changed
-        self.assertEqual(data.response_data['repos'], {})
-        self.assertEqual(data.response_data['images'], {})
+        self.assertEqual(data.v1_response_data['repos'], {})
+        self.assertEqual(data.v1_response_data['images'], {})
 
         # make sure an error was logged
         self.assertEqual(mock_error.call_count, 1)
 
     @mock.patch.object(data.logger, 'error', spec_set=True)
     @mock.patch('os.walk', return_value=[
-                (demo_data.metadata_bad_path, ('', ), ('wrong_version_1.json', ))])
+                (demo_data.metadata_bad_path_v2, ('', ), ('wrong_version_2.json', ))])
     def test_with_wrong_path(self, mock_error, mock_walk):
         mock_app = mock.MagicMock()
 
         data.load_all(mock_app)
 
         # make sure the response data was not changed
-        self.assertEqual(data.response_data['repos'], {})
-        self.assertEqual(data.response_data['images'], {})
+        self.assertEqual(data.v2_response_data['repos'], {})
 
         # make sure an error was logged
         self.assertEqual(mock_error.call_count, 1)

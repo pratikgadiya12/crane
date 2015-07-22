@@ -1,4 +1,4 @@
-from crane.app_util import authorize_repo_id, authorize_name, get_data, get_data_v2
+from crane.app_util import authorize_repo_id, authorize_name, get_data, get_v2_data
 
 
 @authorize_repo_id
@@ -31,5 +31,12 @@ def get_tags_for_repo(repo_id):
 
 @authorize_name
 def get_path_for_repo(repo_id):
-    print(get_data_v2()['repos'])
-    return get_data_v2()['repos'][repo_id].url
+    """
+    Return the URL for the repository.
+
+    :param repo_id: The identifier/name for the repository
+    :type repo_id: basestring
+    :returns: URL for the repository
+    :rtype: basestring
+    """
+    return get_v2_data()['repos'][repo_id].url

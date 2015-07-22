@@ -1,5 +1,8 @@
+from __future__ import absolute_import
 from flask import Blueprint, json, current_app, redirect
-from ..api import repository
+
+from crane import app_util
+from crane.api import repository
 
 
 section = Blueprint('v2', __name__, url_prefix='/v2')
@@ -24,43 +27,45 @@ def add_common_headers(response):
     # if response code is 200, assume it is JSON
     if response.status_code == 200:
         response.headers['Content-Type'] = 'application/json'
-    # current stable release of docker-registry
-    response.headers['X-Docker-Registry-Version'] = '0.6.6'
-    response.headers['Docker-Distribution-API-Version'] = 'registry/2.0'
-    # "common" is documented by docker-registry as a valid config, but I am
-    # just guessing that it will work in our case.
-    response.headers['X-Docker-Registry-Config'] = 'common'
-
+        response.headers['Docker-Distribution-API-Version'] = 'registry/2.0'
     return response
 
 
 @section.route('/')
 def v2():
-    # "True" is what the real docker-registry puts in the response body
+    """
+    Provides version support information for /v2 requests.
+
+    :return: Empty JSON document in the response body
+    :rtype:  flask.response
+    """
+    # "{}" is what the real docker-registry puts in the response body
     response = current_app.make_response(json.dumps({}))
-    response.headers['X-Docker-Registry-Standalone'] = True
     return response
 
 
-@section.route('/<path:username>/<path:repo>/<path:file_path>')
-def name_redirect(username, repo, file_path):
+@section.route('/<path:name>/<path:file_path>')
+def name_redirect(name, file_path):
     """
+    Redirects the client to the path from where the file can be accessed.
 
+    :param name:    name of the repository. The combination of username and repo specifies
+                    a repo id
+    :type  name:    basestring
 
-    :param username:    username of the repo
-    :type  username:    basestring
-    :param repo:    name of the repository
-    :type  repo:    basestring
     :param file_path: the relative path
     :type file_path:  basestring
+
     :return:    302 redirect response
     :rtype:     flask.Response
     """
 
-    repo_id = '/'.join([username, repo])
-    print(repo_id)
-    base_url = repository.get_path_for_repo(repo_id)
+    # name, repo_name, path = app_util.validate_and_transform_repo_name(username, repo, file_path)
+    full_path = '/'.join([name, file_path])
+
+    name_component, path_component = app_util.validate_and_transform_repo_name(full_path)
+    base_url = repository.get_path_for_repo(name_component)
     if not base_url.endswith('/'):
         base_url += '/'
-    url = base_url + file_path
+    url = base_url + path_component
     return redirect(url)

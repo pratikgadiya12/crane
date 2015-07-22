@@ -12,17 +12,17 @@ from . import config
 
 logger = logging.getLogger(__name__)
 
-response_data = {
+v1_response_data = {
     'repos': {},
     'images': {},
 }
 
-response_data_v2 = {
+v2_response_data = {
     'repos': {}
 }
 
-Repo = namedtuple('Repo', ['url', 'images_json', 'tags_json', 'url_path', 'protected'])
-Repo_v2 = namedtuple('Repo_v2', ['url', 'url_path', 'protected'])
+V1Repo = namedtuple('V1Repo', ['url', 'images_json', 'tags_json', 'url_path', 'protected'])
+V2Repo = namedtuple('V2Repo', ['url', 'url_path', 'protected'])
 
 
 def load_from_file(path):
@@ -33,6 +33,8 @@ def load_from_file(path):
     :type  path:    basestring
 
     :return:    tuple of repo_id (str), repo_tuple (Repo), image_ids (list)
+                if the metadata corresponds to v1 registry. If metadata is for
+                v2 registry, image_ids will be None.
     :rtype:     tuple
 
     :raises ValueError: if the "version" value in the metadata is not a supported
@@ -50,14 +52,14 @@ def load_from_file(path):
 
     if repo_data['version'] == 1:
         image_ids = [image['id'] for image in repo_data['images']]
-        repo_tuple = Repo(repo_data['url'],
-                          json.dumps(repo_data['images']),
-                          json.dumps(repo_data['tags']),
-                          url_path, repo_data.get('protected', False))
+        repo_tuple = V1Repo(repo_data['url'],
+                            json.dumps(repo_data['images']),
+                            json.dumps(repo_data['tags']),
+                            url_path, repo_data.get('protected', False))
         return repo_id, repo_tuple, image_ids
     elif repo_data['version'] == 2:
-        repo_tuple = Repo_v2(repo_data['url'],
-                             url_path, repo_data.get('protected', False))
+        repo_tuple = V2Repo(repo_data['url'],
+                            url_path, repo_data.get('protected', False))
         return repo_id, repo_tuple, None
 
 
@@ -115,11 +117,11 @@ def load_all(app):
     :param app: the flask application
     :type  app: flask.Flask
     """
-    global response_data_v2
-    repos_v2 = {}
+    global v2_response_data
+    v2_repos = {}
 
-    global response_data
-    repos = {}
+    global v1_response_data
+    v1_repos = {}
     images = {}
 
     try:
@@ -129,27 +131,27 @@ def load_all(app):
         paths = [os.path.join(dirpath, f)
                  for dirpath, dirnames, files in os.walk(data_dir)
                  for f in fnmatch.filter(files, '*.json')]
-        print(paths)
+
         # load data from each file
         for metadata_file_path in paths:
             repo_id, repo_tuple, image_ids = load_from_file(metadata_file_path)
-            if image_ids:
-                repos[repo_id] = repo_tuple
+            if isinstance(repo_tuple, V1Repo):
+                v1_repos[repo_id] = repo_tuple
                 for image_id in image_ids:
                     images.setdefault(image_id, set()).add(repo_id)
             else:
-                repos_v2[repo_id] = repo_tuple
+                v2_repos[repo_id] = repo_tuple
 
         # make each set immutable
         for image_id in images.keys():
             images[image_id] = frozenset(images[image_id])
         # replace old data structure with new
-        response_data = {
-            'repos': repos,
+        v1_response_data = {
+            'repos': v1_repos,
             'images': images,
         }
-        response_data_v2 = {
-            'repos': repos_v2
+        v2_response_data = {
+            'repos': v2_repos
         }
     except Exception, e:
         logger.error('aborting metadata load: %s' % str(e))

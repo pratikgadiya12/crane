@@ -9,6 +9,7 @@ from rhsm import certificate2
 from crane import exceptions
 from crane import data
 
+
 logger = logging.getLogger(__name__)
 
 
@@ -147,22 +148,22 @@ def get_data():
     :rtype: dict
     """
     if not hasattr(request, 'crane_data'):
-        request.crane_data = data.response_data
+        request.crane_data = data.v1_response_data
 
     return request.crane_data
 
 
-def get_data_v2():
+def get_v2_data():
     """
     Get the current data used for processing requests from
     the flask request context.  This is used so the same
-    set of data will be used for the entirety of a single request
+    set of data will be used for the entirety of a single request.
 
     :returns: response_data dictionary as defined in crane.data
     :rtype: dict
     """
     if not hasattr(request, 'crane_data_v2'):
-        request.crane_data_v2 = data.response_data_v2
+        request.crane_data_v2 = data.v2_response_data
 
     return request.crane_data_v2
 
@@ -219,17 +220,27 @@ def validate_and_transform_repoid(repo_id):
     return repo_id
 
 
-def name_authorized(name):
-    response_data_v2 = get_data_v2()
-    repo_tuple_v2 = response_data_v2['repos'].get(name)
+def name_is_authorized(name):
+    """
+    Determines if the current request is authorized to read the given repo name.
+
+    :param name: name of the repository being accessed
+    :type  name: basestring
+
+    :raises exceptions.HTTPError: if authorization fails
+                                  403: if the user is not authorized
+                                  404: if the repo does not exist in this app
+    """
+    v2_response_data = get_v2_data()
+    v2_repo_tuple = v2_response_data['repos'].get(name)
 
     # if this deployment of this app does not know about the requested repo
-    if repo_tuple_v2 is None:
+    if v2_repo_tuple is None:
         raise exceptions.HTTPError(httplib.NOT_FOUND)
 
-    if repo_tuple_v2.protected:
+    if v2_repo_tuple.protected:
         cert = _get_certificate()
-        if not cert or not cert.check_path(repo_tuple_v2.url_path):
+        if not cert or not cert.check_path(v2_repo_tuple.url_path):
             # return 404 so we don't reveal the existence of repos that the user
             # is not authorized for
             raise exceptions.HTTPError(httplib.NOT_FOUND)
@@ -238,7 +249,7 @@ def name_authorized(name):
 def authorize_name(func):
     """
     Authorize that a particular certificate has access to any directory
-    containing the repository identified by repo_id
+    containing the repository identified by repo_name.
 
     :param repo_id: The identifier for the repository
     :type repo_id: str
@@ -248,7 +259,35 @@ def authorize_name(func):
     @wraps(func)
     def wrapper(repo_id, *args, **kwargs):
         # will raise an appropriate exception if not found or not authorized
-        name_authorized(repo_id)
+        name_is_authorized(repo_id)
         return func(repo_id, *args, **kwargs)
 
     return wrapper
+
+
+def validate_and_transform_repo_name(path):
+    """
+    Checks and extracts a repo registry id from the path parameter. The
+    repo name is considered to be the substring left of any of the [tags, manifests,
+    blobs].
+
+    :param path: value for full path component containing both repo name and file path
+    :type path: basestring
+
+    :return: tuple containing extracted name and path components
+    :rtype: tuple
+    """
+
+    path_components = ['tags', 'manifests', 'blobs']
+    name_component = ''
+    path_component = ''
+
+    if not any([value in path for value in path_components]):
+        raise exceptions.HTTPError(httplib.NOT_FOUND)
+
+    for component in path_components:
+        if component in path:
+            name_component = path.split(component, 1)[0].strip('/')
+            path_component = component + path.split(component, 1)[1]
+
+    return name_component, path_component
