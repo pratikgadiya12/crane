@@ -112,8 +112,8 @@ def repo_tags(repo_id):
     return repository.get_tags_for_repo(repo_id)
 
 
-@section.route('/repositories/<path:repo_id>/tags/latest')
-def repo_tags_latest(repo_id):
+@section.route('/repositories/<path:repo_id>/tags/<tag_name>')
+def repo_tags_get_tag(repo_id, tag_name):
     """
     Returns a json containing an object that has image id associated with the tag
     latest.
@@ -124,13 +124,16 @@ def repo_tags_latest(repo_id):
                     this call. This function strips that off.
     :type  repo_id: basestring
 
-    :return:    json string containing an object having image id associated with tag latest
+    :param tag_name: name of the tag whose associated image ide has to be returned
+    :type  tag_name: basestring
+
+    :return:    json string containing an object having image id associated with tag name
     :rtype:     basestring
     """
     repo_id = app_util.validate_and_transform_repoid(repo_id)
 
     tags = repository.get_tags_for_repo(repo_id)
-    latest = json.loads(tags).get('latest')
+    latest = json.loads(tags).get(tag_name)
     if latest is None:
         raise exceptions.HTTPError(httplib.NOT_FOUND)
     return json.dumps(latest)
