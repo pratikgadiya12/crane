@@ -116,7 +116,7 @@ def repo_tags(repo_id):
 def repo_tags_get_tag(repo_id, tag_name):
     """
     Returns a json containing an object that has image id associated with the tag
-    latest.
+    name.
 
     :param repo_id: unique ID for the repository. May contain 0 or 1 of the "/"
                     character. For repo IDs that do not contain a slash, the
@@ -124,7 +124,7 @@ def repo_tags_get_tag(repo_id, tag_name):
                     this call. This function strips that off.
     :type  repo_id: basestring
 
-    :param tag_name: name of the tag whose associated image ide has to be returned
+    :param tag_name: name of the tag whose associated image id has to be returned
     :type  tag_name: basestring
 
     :return:    json string containing an object having image id associated with tag name
@@ -133,10 +133,10 @@ def repo_tags_get_tag(repo_id, tag_name):
     repo_id = app_util.validate_and_transform_repoid(repo_id)
 
     tags = repository.get_tags_for_repo(repo_id)
-    latest = json.loads(tags).get(tag_name)
-    if latest is None:
+    image_id = json.loads(tags).get(tag_name)
+    if image_id is None:
         raise exceptions.HTTPError(httplib.NOT_FOUND)
-    return json.dumps(latest)
+    return json.dumps(image_id)
 
 
 @section.route('/search')
