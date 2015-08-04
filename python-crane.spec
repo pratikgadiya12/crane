@@ -44,7 +44,7 @@ settings.
 
 mkdir -p %{buildroot}/%{_usr}/share/crane/
 mkdir -p %{buildroot}/%{_var}/lib/crane/metadata/
-mkdir -p %{buildroot}/%{_etc}/httpd/conf.d/
+
 cp deployment/crane.wsgi %{buildroot}/%{_usr}/share/crane/
 
 %if 0%{?fedora} >= 18 || 0%{?rhel} >= 7
