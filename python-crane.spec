@@ -48,10 +48,10 @@ mkdir -p %{buildroot}/%{_var}/lib/crane/metadata/
 cp deployment/crane.wsgi %{buildroot}/%{_usr}/share/crane/
 
 %if 0%{?fedora} >= 18 || 0%{?rhel} >= 7
-cp deployment/apache24.conf %{buildroot}/%{_etc}/httpd/conf.d/crane.conf
+cp deployment/apache24.conf %{buildroot}/%{_etc}/etc/httpd/conf.d/crane.conf
 cp deployment/crane.wsgi %{buildroot}/%{_usr}/share/crane/
 %else
-cp deployment/apache22.conf %{buildroot}/%{_usr}/httpd/conf.d/crane.conf
+cp deployment/apache22.conf %{buildroot}/%{_usr}/share/crane/apache.conf
 cp deployment/crane_el6.wsgi %{buildroot}/%{_usr}/share/crane/crane.wsgi
 %endif
 
