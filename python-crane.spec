@@ -10,7 +10,7 @@ Release: 0.3.beta%{?dist}
 Summary: docker-registry-like API with redirection, as a wsgi app
 
 License: GPLv2
-URL: https://github.com/aprajshekhar/crane
+URL: https://github.com/pulp/crane
 Source0: %{name}-%{version}.tar.gz
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 BuildArch: noarch
@@ -48,7 +48,7 @@ mkdir -p %{buildroot}/%{_var}/lib/crane/metadata/
 cp deployment/crane.wsgi %{buildroot}/%{_usr}/share/crane/
 
 %if 0%{?fedora} >= 18 || 0%{?rhel} >= 7
-cp deployment/apache24.conf %{buildroot}/%{_etc}/etc/httpd/conf.d/crane.conf
+cp deployment/apache24.conf %{buildroot}/%{_usr}/share/crane/apache.conf
 cp deployment/crane.wsgi %{buildroot}/%{_usr}/share/crane/
 %else
 cp deployment/apache22.conf %{buildroot}/%{_usr}/share/crane/apache.conf
