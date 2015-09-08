@@ -5,8 +5,8 @@
 %endif
 
 Name: python-crane
-Version: 1.2.1
-Release: 1%{?dist}
+Version: 1.2.0
+Release: 0%{?dist}
 Summary: docker-registry-like API with redirection, as a wsgi app
 
 License: GPLv2
@@ -80,7 +80,12 @@ fi
 
 
 %changelog
-* Tue Sep 08 2015 A.P. Rajshekhar <randalap@redhat.com> 1.2.1-1
+* Tue Sep 08 2015 A.P. Rajshekhar <randalap@redhat.com> 1.2.0-0
+- Automatic commit of package [python-crane] release [1.2.1-1].
+  (randalap@redhat.com)
+- Automatic commit of package [python-crane] release [1.2.0-0.4.beta].
+  (bcourt@redhat.com)
+- Bump version to 1.2.0 beta 4 (bcourt@redhat.com)
 - Revert "spec change for conf" (randalap@redhat.com)
 - Revert "moving conf to etc" (randalap@redhat.com)
 - Revert "conf changes in spec file" (randalap@redhat.com)
@@ -88,11 +93,52 @@ fi
 - moving conf to etc (randalap@redhat.com)
 - spec change for conf (randalap@redhat.com)
 - Docker 1.7 /tags/<tag> endpoint (randalap@redhat.com)
+- Docker 1.7 /tags/<tag> endpoint (randalap@redhat.com)
 - Docker 1.7 /tags/latest endpoint (randalap@redhat.com)
 - Docker 1.7 /tags/latest endpoint (randalap@redhat.com)
 - Docker 1.7 /tags/latest endpoint (randalap@redhat.com)
+- Fix the before_script travis target to run the flake8 command
+  (bcourt@redhat.com)
 - Update README.rst (ap.rajshekhar@gmail.com)
 - Update README.rst (ap.rajshekhar@gmail.com)
+- Check 'Accept' header to determine content type to return
+  (dkliban@redhat.com)
+- Automatic commit of package [python-crane] release [1.1.0-0.3.beta]. (pulp-
+  infra@redhat.com)
+- Bumping build number for 1.1.0 beta (dkliban@redhat.com)
+- Removed fc20 from dist_list.txt (dkliban@redhat.com)
+- Automatic commit of package [python-crane] release [1.2.0-0.3.beta].
+  (bcourt@redhat.com)
+- Change the solr field used for searches to use publishedAbstract instead of
+  abstract for the description (bcourt@redhat.com)
+- Automatic commit of package [python-crane] release [1.2.0-0.2.beta].
+  (bcourt@redhat.com)
+- update version to 1.2.0-0.2.beta (bcourt@redhat.com)
+- Docker Search for ISV repos [docker-search] (randalap@redhat.com)
+- Adding fc22 to the dist_list.txt (dkliban@redhat.com)
+- Docker Search for ISV repos [docker-search] (randalap@redhat.com)
+- add users api path to support docker login (aweiteka@redhat.com)
+- Bumping version to 1.1.1 (dkliban@redhat.com)
+- Automatic commit of package [python-crane] release [1.1.0-0.2.beta]. (pulp-
+  infra@redhat.com)
+- Bumping version for beta release (dkliban@redhat.com)
+- Bumping version for release (dkliban@redhat.com)
+- Automatic commit of package [python-crane] release [1.0.0-0.4.rc]. (pulp-
+  infra@redhat.com)
+- 1.0.0-0.4.rc (bcourt@redhat.com)
+- Automatic commit of package [python-crane] release [1.1.0-0.1.alpha]. (pulp-
+  infra@redhat.com)
+- Move master to version 1.2 (bcourt@redhat.com)
+- Create the 1.1 branch for crane (bcourt@redhat.com)
+- Automatic commit of package [python-crane] release [1.0.0-0.3.beta]. (pulp-
+  infra@redhat.com)
+- Defaults are no longer hard-coded for solr-based search results
+  (mhrivnak@redhat.com)
+- bump version (bcourt@redhat.com)
+- Added an HTML view for /crane/repositories (dkliban@redhat.com)
+- update patch release (bcourt@redhat.com)
+- adding json display of docker repositories served by crane
+  (skarmark@redhat.com)
 
 * Fri Nov 21 2014 Chris Duryee <cduryee@redhat.com> 0.2.2-1
 - Bump release to 1 (cduryee@redhat.com)
