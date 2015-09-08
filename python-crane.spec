@@ -3,10 +3,10 @@
 %{!?python2_sitelib: %global python2_sitelib %(%{__python2} -c "from distutils.sysconfig import get_python_lib; print(get_python_lib())")}
 %{!?python2_sitearch: %global python2_sitearch %(%{__python2} -c "from distutils.sysconfig import get_python_lib; print(get_python_lib(1))")}
 %endif
-
+Distribution: rri
 Name: python-crane
 Version: 1.2.0
-Release: 0%{?dist}
+Release: 2%{?dist}_rri
 Summary: docker-registry-like API with redirection, as a wsgi app
 
 License: GPLv2
@@ -80,6 +80,21 @@ fi
 
 
 %changelog
+* Tue Sep 08 2015 A.P. Rajshekhar <randalap@redhat.com> 1.2.0-2_rri
+- 
+
+* Tue Sep 08 2015 A.P.Rajshekhar - 1.2.0-2.1
+- rebuilt
+
+* Tue Sep 08 2015 A.P.Rajshekhar - 1.2.0-1.1
+- rebuilt
+
+* Tue Sep 08 2015 A.P.Rajshekhar - 1.2.0-1
+- rebuilt
+
+* Tue Sep 08 2015 A.P. Rajshekhar <randalap@redhat.com>
+- 
+
 * Tue Sep 08 2015 A.P. Rajshekhar <randalap@redhat.com> 1.2.0-0
 - Automatic commit of package [python-crane] release [1.2.1-1].
   (randalap@redhat.com)
