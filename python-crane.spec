@@ -5,8 +5,8 @@
 %endif
 
 Name: python-crane
-Version: 1.2.0
-Release: 0.4.beta%{?dist}
+Version: 1.2.1
+Release: 1%{?dist}
 Summary: docker-registry-like API with redirection, as a wsgi app
 
 License: GPLv2
@@ -80,6 +80,20 @@ fi
 
 
 %changelog
+* Tue Sep 08 2015 A.P. Rajshekhar <randalap@redhat.com> 1.2.1-1
+- Revert "spec change for conf" (randalap@redhat.com)
+- Revert "moving conf to etc" (randalap@redhat.com)
+- Revert "conf changes in spec file" (randalap@redhat.com)
+- conf changes in spec file (randalap@redhat.com)
+- moving conf to etc (randalap@redhat.com)
+- spec change for conf (randalap@redhat.com)
+- Docker 1.7 /tags/<tag> endpoint (randalap@redhat.com)
+- Docker 1.7 /tags/latest endpoint (randalap@redhat.com)
+- Docker 1.7 /tags/latest endpoint (randalap@redhat.com)
+- Docker 1.7 /tags/latest endpoint (randalap@redhat.com)
+- Update README.rst (ap.rajshekhar@gmail.com)
+- Update README.rst (ap.rajshekhar@gmail.com)
+
 * Fri Nov 21 2014 Chris Duryee <cduryee@redhat.com> 0.2.2-1
 - Bump release to 1 (cduryee@redhat.com)
 
