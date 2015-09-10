@@ -122,6 +122,12 @@ class TestAuthorizeName(FlaskContextBase):
     def test_if_protected_but_invalid(self, mock_get_cert):
         cert = certificate.create_from_file(demo_data.demo_entitlement_cert_path)
         mock_get_cert.return_value = cert
+        with self.assertRaises(exceptions.HTTPError) as assertion:
+            mock_name_func('protected')
+        self.assertEqual(assertion.exception.status_code, httplib.NOT_FOUND)
+        
+
+    def test_if_protected_but_no_cert(self):
         result = mock_name_func('protected')
         self.assertEquals(result, 'foo')
 
