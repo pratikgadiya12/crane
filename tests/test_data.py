@@ -36,7 +36,7 @@ class TestLoadFromFile(unittest.TestCase):
 
         # only v1 metadata file contains images and tags information,
         # hence need to check name of the tuple
-        if repo_tuple.__class__.__name__=='Repo':
+        if repo_tuple.__class__.__name__ == 'Repo':
             images = json.loads(repo_tuple.images_json)
             self.assertTrue({'id': 'abc123'} in images)
             self.assertTrue({'id': 'xyz789'} in images)
