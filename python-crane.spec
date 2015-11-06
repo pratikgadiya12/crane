@@ -18,6 +18,7 @@ BuildArch: noarch
 BuildRequires: python2-devel
 BuildRequires: python-setuptools
 
+Requires: python = 2.6
 Requires: python-flask >= 0.9
 Requires: python-setuptools
 Requires: python-rhsm
