@@ -6,7 +6,7 @@
 
 Name: python-crane
 Version: 1.2.0
-Release: 5%{?dist}
+Release: 6%{?dist}
 Summary: docker-registry-like API with redirection, as a wsgi app
 
 License: GPLv2
@@ -81,6 +81,9 @@ fi
 
 
 %changelog
+* Mon Nov 09 2015 root - 1.2.0-6
+- rebuilt
+
 * Fri Nov 06 2015 root - 1.2.0-5
 - rebuilt
 
