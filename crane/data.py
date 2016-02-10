@@ -153,5 +153,6 @@ def load_all(app):
         v2_response_data = {
             'repos': v2_repos
         }
+        logger.debug("done loading data")
     except Exception, e:
         logger.error('aborting metadata load: %s' % str(e))
