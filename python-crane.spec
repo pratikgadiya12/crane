@@ -69,18 +69,7 @@ rm -rf %{buildroot}%{python2_sitelib}/tests
 %doc AUTHORS COPYRIGHT LICENSE README.rst
 
 
-%post
-semanage fcontext -a -t httpd_sys_content_t '%{_var}/lib/crane(/.*)?'
-restorecon -R -v %{_var}/lib/crane
-
-%postun
-if [ $1 -eq 0 ] ; then  # final removal
-semanage fcontext -d -t httpd_sys_content_t '%{_var}/lib/crane(/.*)?'
-restorecon -R -v %{_var}/lib/crane
-fi
-
-
-%changelog
+changelog
 * Mon Nov 09 2015 root - 1.2.0-6
 - rebuilt
 
