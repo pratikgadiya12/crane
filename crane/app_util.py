@@ -216,6 +216,28 @@ def get_repositories():
     return relevant_repo_data
 
 
+def get_v2_repositories():
+    """
+    Get the current data used for processing requests from the flask request context
+    and format it to display basic information about image ids and tags associated
+    with each repository.
+
+    Value corresponding to each key(repo-registry-id) is a dictionary itself
+    with the following format:
+    {'protected': true/false}
+
+    :return: dictionary keyed by repo-registry-ids
+    :rtype: dict
+    """
+    all_repo_data_v2 = get_v2_data().get('repos', {})
+    relevant_repo_data = {}
+    for repo_registry_id, repo in all_repo_data_v2.items():
+        relevant_repo_data[repo_registry_id] = {'protected': repo.protected}
+    print "v2"
+    print relevant_repo_data
+    return relevant_repo_data
+
+
 def validate_and_transform_repoid(repo_id):
     """
     Validates that the repo ID does not contain more than one slash, and removes
@@ -270,7 +292,7 @@ def name_is_authorized(name):
         if not cert or not cert.check_path(value):
             # return 404 so we don't reveal the existence of repos that the user
             # is not authorized for
-            raise exceptions.HTTPError(httplib.NOT_FOUND)
+            raise exceptions.HTTPError(httplib.UNAUTHORIZED)
 
 
 def authorize_name(func):

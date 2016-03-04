@@ -14,28 +14,28 @@ class TestPath(base.BaseCraneAPITest):
         self.assertEqual(parsed_response_data['errors'][0]['message'], 'Not Found')
 
     def test_valid_repo_name_for_manifest(self):
-        response = self.test_client.get('/v2/redhat/foo/manifests/2')
+        response = self.test_client.get('/v2/redhat/foo2/manifests/2')
 
         self.assertEqual(response.status_code, 302)
         self.assertTrue(response.headers['Content-Type'].startswith('text/html'))
         self.assertTrue('foo/bar/manifests/2' in response.headers['Location'])
 
     def test_valid_repo_name_for_tags(self):
-        response = self.test_client.get('/v2/redhat/foo/tags/latest')
+        response = self.test_client.get('/v2/redhat/foo2/tags/latest')
 
         self.assertEqual(response.status_code, 302)
         self.assertTrue(response.headers['Content-Type'].startswith('text/html'))
         self.assertTrue('foo/bar/tags/latest' in response.headers['Location'])
 
     def test_valid_repo_name_for_blobs(self):
-        response = self.test_client.get('/v2/redhat/foo/blobs/123')
+        response = self.test_client.get('/v2/redhat/foo2/blobs/123')
 
         self.assertEqual(response.status_code, 302)
         self.assertTrue(response.headers['Content-Type'].startswith('text/html'))
         self.assertTrue('foo/bar/blobs/123' in response.headers['Location'])
 
     def test_valid_repo_name_without_trailing_slash(self):
-        response = self.test_client.get('/v2/redhat/foo/blobs/123')
+        response = self.test_client.get('/v2/redhat/foo2/blobs/123')
 
         self.assertEqual(response.status_code, 302)
         self.assertTrue(response.headers['Content-Type'].startswith('text/html'))

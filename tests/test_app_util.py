@@ -6,7 +6,7 @@ import unittest2 as unittest
 
 from crane import app_util
 from crane import exceptions
-from crane.data import V1Repo
+from crane.data import V1Repo, V2Repo
 import demo_data
 
 from views import base
@@ -276,4 +276,19 @@ class TestValidateGetRepositories(unittest.TestCase):
     def test_get_repositories_empty(self, mock_get_data):
         mock_get_data.return_value = {'repos': {}}
         ret = app_util.get_repositories()
+        self.assertEqual(ret, {})
+
+    @mock.patch('crane.app_util.get_v2_data')
+    def test_get_repositories(self, mock_get_v2_data):
+        repo = V2Repo(url="",
+                      url_path="",
+                      protected=False)
+        mock_get_v2_data.return_value = {'repos': {"test-repo": repo}}
+        ret = app_util.get_v2_repositories()
+        self.assertEqual(ret['test-repo']['protected'], False)
+
+    @mock.patch('crane.app_util.get_v2_data')
+    def test_get_repositories_empty(self, mock_get_v2_data):
+        mock_get_v2_data.return_value = {'repos': {}}
+        ret = app_util.get_v2_repositories()
         self.assertEqual(ret, {})

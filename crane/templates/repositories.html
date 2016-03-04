@@ -18,6 +18,7 @@
           </tr>
         </thead>
         <tbody>
+        {% if repo_info.tags is defined %}
           {% for tag, image_id in repo_info.tags.iteritems() %}
           <tr class="gradeX">
             <td>
@@ -28,6 +29,7 @@
               </td>
           </tr>
           {% endfor %}
+        {% endif %}
         </tbody>
       </table>
             <hr>

@@ -19,6 +19,8 @@ def repositories():
     :rtype:     basestring
     """
     repos_json = app_util.get_repositories()
+    repos_json.update(app_util.get_v2_repositories())
+    print repos_json
     if 'Accept' in request.headers and request.headers['Accept'] == 'application/json':
         response = current_app.make_response(json.dumps(repos_json))
         response.headers['Content-Type'] = 'application/json'
