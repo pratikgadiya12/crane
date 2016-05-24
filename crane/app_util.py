@@ -64,7 +64,7 @@ def repo_is_authorized(repo_id):
     """
     response_data = get_data()
     repo_tuple = response_data['repos'].get(repo_id)
-
+    logger.debug('Scheme: %s' % request.environ.get('wsgi.url_scheme', ''))
     # if this deployment of this app does not know about the requested repo
     if repo_tuple is None:
         raise exceptions.HTTPError(httplib.NOT_FOUND)
@@ -74,6 +74,7 @@ def repo_is_authorized(repo_id):
         if not cert or not cert.check_path(repo_tuple.url_path):
             # return 404 so we don't reveal the existence of repos that the user
             # is not authorized for
+            logger.info('repo is protected and client is not authorized to access it')
             raise exceptions.HTTPError(httplib.NOT_FOUND)
 
 
@@ -109,6 +110,7 @@ def authorize_image_id(func):
                 break
             elif cert and cert.check_path(repo_tuple.url_path):
                 found_match = True
+                logger.info('The requested path is protected and the client can access it')
                 break
 
         if not found_match:
@@ -130,10 +132,12 @@ def _get_certificate():
     env = request.environ
     pem_str = env.get('SSL_CLIENT_CERT', '')
     if not pem_str:
+        logger.info('No PEM string found')
         return None
     cert = certificate.create_from_pem(pem_str)
     # The certificate may not be an entitlement certificate in which case we also return None
     if not isinstance(cert, certificate2.EntitlementCertificate):
+        logger.info('Entitlement cert not found')
         return None
     return cert
 

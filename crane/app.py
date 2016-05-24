@@ -22,7 +22,8 @@ def create_app():
 
     app = Flask(__name__)
     app.register_blueprint(v1.section)
-    app.register_blueprint(v2.section)
+    # commented until V2 needs to be enabled
+    # app.register_blueprint(v2.section)
     app.register_blueprint(crane.section)
     app.register_error_handler(exceptions.HTTPError, app_util.http_error_handler)
 

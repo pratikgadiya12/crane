@@ -6,10 +6,10 @@ from crane import app_util, exceptions
 from crane.api import repository
 
 
-section = Blueprint('v2', __name__, url_prefix='/v2')
+# section = Blueprint('v2', __name__, url_prefix='/v2')
 
 
-@section.after_request
+# @section.after_request
 def add_common_headers(response):
     """
     Add headers to a response.
@@ -32,7 +32,7 @@ def add_common_headers(response):
     return response
 
 
-@section.route('/')
+# @section.route('/')
 def v2():
     """
     Provides version support information for /v2 requests.
@@ -45,7 +45,7 @@ def v2():
     return response
 
 
-@section.route('/<path:name>/<path:file_path>')
+# @section.route('/<path:name>/<path:file_path>')
 def name_redirect(name, file_path):
     """
     Redirects the client to the path from where the file can be accessed.
@@ -72,7 +72,7 @@ def name_redirect(name, file_path):
     return redirect(url)
 
 
-@section.errorhandler(exceptions.HTTPError)
+# @section.errorhandler(exceptions.HTTPError)
 def handle_error(error):
     """
     Creates a v2 compatible error response.

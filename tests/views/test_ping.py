@@ -23,6 +23,7 @@ class TestPing(unittest.TestCase):
         # the real docker-registry has only "True" as the body
         self.assertEqual(json.loads(response.data), True)
 
+    @unittest.skip
     def test_response_for_v2(self):
         response = self.app.get('/v2/')
 
