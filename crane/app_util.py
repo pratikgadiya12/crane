@@ -67,7 +67,7 @@ def repo_is_authorized(repo_id):
     # logger.debug('Scheme: %s' % request.environ.get('wsgi.url_scheme', ''))
     # if this deployment of this app does not know about the requested repo
     if repo_tuple is None:
-        logger.info('repo tuple %s not found ' % repo_tuple)
+        logger.info('repo data for %s not found ' % repo_id)
         raise exceptions.HTTPError(httplib.NOT_FOUND)
 
     if repo_tuple.protected:
@@ -133,7 +133,7 @@ def _get_certificate():
     env = request.environ
     pem_str = env.get('SSL_CLIENT_CERT', '')
     if not pem_str:
-        logger.info('No PEM string found for path  %s' % request.environ.get('PATH_INFO', ''))
+        logger.info('No PEM string found for path  %s for scheme %s' % (request.environ.get('PATH_INFO', ''), env.get('wsgi.url_scheme','')))
         return None
     cert = certificate.create_from_pem(pem_str)
     logger.info('cert is of type %s' % cert)
