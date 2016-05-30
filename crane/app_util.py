@@ -132,7 +132,7 @@ def _get_certificate():
     env = request.environ
     pem_str = env.get('SSL_CLIENT_CERT', '')
     if not pem_str:
-        logger.info('No PEM string found')
+        logger.info('No PEM string found for scheme %s' % request.environ.get('wsgi.url_scheme', ''))
         return None
     cert = certificate.create_from_pem(pem_str)
     # The certificate may not be an entitlement certificate in which case we also return None
