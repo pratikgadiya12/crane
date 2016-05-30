@@ -131,6 +131,7 @@ def _get_certificate():
     :rtype: rhsm.certificate2.EntitlementCertificate, or None
     """
     env = request.environ
+    logger.info('env %s' % env)
     pem_str = env.get('SSL_CLIENT_CERT', '')
     if not pem_str:
         logger.info('No PEM string found for path  %s for scheme %s' % (request.environ.get('PATH_INFO', ''), env.get('wsgi.url_scheme','')))
