@@ -72,10 +72,11 @@ def repo_is_authorized(repo_id):
 
     if repo_tuple.protected:
         cert = _get_certificate()
+        logger.info('cert when checking repo %s' % cert)
         if not cert or not cert.check_path(repo_tuple.url_path):
             # return 404 so we don't reveal the existence of repos that the user
             # is not authorized for
-            logger.info('repo is protected and client is not authorized to access it')
+            logger.info('repo %s is protected and client is not authorized to access it' % repo_tuple.url_path)
             raise exceptions.HTTPError(httplib.NOT_FOUND)
 
 
