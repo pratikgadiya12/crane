@@ -21,10 +21,11 @@ class Solr(HTTPBackend):
         """
         self.url_template = url_template
 
-    def search(self, query):
+    def search(self, query, is_v2=False):
         """
         Searches a Solr search backend based on a given query parameter.
 
+        :param is_v2:
         :param query:   a string representing the search input from a user that
                         should be passed through to the solr backend
         :type  query:   basestring
@@ -42,7 +43,11 @@ class Solr(HTTPBackend):
         body = self._get_data(url)
 
         results = self._parse(body)
-        filtered_results = itertools.ifilter(self._filter_result, results)
+        if not is_v2:
+            filtered_results = itertools.ifilter(self._filter_result, results)
+        else:
+            filtered_results = itertools.ifilter(self._filter_result_v2, results)
+
         return itertools.imap(self._format_result, filtered_results)
 
     def _parse(self, body):
