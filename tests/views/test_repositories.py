@@ -12,16 +12,23 @@ class TestRepository(base.BaseCraneAPITest):
         self.assertEqual(response.headers['Content-Type'], 'application/json')
 
         response_data = json.loads(response.data)
-        expected_data = {'protected': {'protected': False},
-                         'redhat/foo2': {'protected': False,
-                                 },
-                         'registry': {'protected': True},
-                         'v2/bar': {'protected': False}}
+        expected_data = {'baz': {'protected': True,
+                                 'tags': {'latest': 'baz123'},
+                                 'image_ids': ['baz123']},
+                         'bar': {'protected': False,
+                                 'tags': {'latest': 'def456', 'test': 'ghi789'},
+                                 'image_ids': ['def456']},
+                         'qux': {'protected': True,
+                                 'tags': {'latest': 'qux123'},
+                                 'image_ids': ['qux123']},
+                         'redhat/foo': {'protected': False,
+                                        'tags': {'latest': 'abc123', 'test': 'def234'},
+                                        'image_ids': ['abc123', 'xyz789']}}
 
-        self.assertEqual(response_data['protected'], expected_data['protected'])
-        self.assertEqual(response_data['registry'], expected_data['registry'])
-        self.assertEqual(response_data['v2/bar'], expected_data['v2/bar'])
-        self.assertEqual(response_data['redhat/foo2'], expected_data['redhat/foo2'])
+        self.assertEqual(response_data['baz'], expected_data['baz'])
+        self.assertEqual(response_data['bar'], expected_data['bar'])
+        self.assertEqual(response_data['qux'], expected_data['qux'])
+        self.assertEqual(response_data['redhat/foo'], expected_data['redhat/foo'])
 
     def test_repositories_html(self):
         response = self.test_client.get('/crane/repositories')
