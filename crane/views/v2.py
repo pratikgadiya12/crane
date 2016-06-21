@@ -64,7 +64,7 @@ def name_redirect(relative_path):
     return redirect(url)
 
 
-# @section.errorhandler(exceptions.HTTPError)
+@section.errorhandler(exceptions.HTTPError)
 def handle_error(error):
     """
     Creates a v2 compatible error response.
@@ -82,29 +82,3 @@ def handle_error(error):
     response.headers['Content-Type'] = 'application/json'
     response.status_code = error.status_code
     return response
-
-
-@section.route('/search')
-def search():
-    """
-    Returns a json document containing search results in the format expected
-    from the docker index API.
-
-    :return:    json structure containing search results
-    :rtype:     basestring
-
-    :raises exceptions.HTTPError:   if "q" is missing in the url's parameters,
-                                    raises with 400 response code
-    """
-    query = request.args.get('q', '')
-
-    if not query:
-        raise exceptions.HTTPError(httplib.BAD_REQUEST, message='parameter "q" is required')
-
-    data = list(search_package.backend.search(query, True))
-    response = {
-        'query': query,
-        'num_results': len(data),
-        'results': data,
-    }
-    return json.dumps(response)

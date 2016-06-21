@@ -233,8 +233,6 @@ def get_v2_repositories():
     relevant_repo_data = {}
     for repo_registry_id, repo in all_repo_data_v2.items():
         relevant_repo_data[repo_registry_id] = {'protected': repo.protected}
-    print "v2"
-    print relevant_repo_data
     return relevant_repo_data
 
 
@@ -292,7 +290,7 @@ def name_is_authorized(name):
         if not cert or not cert.check_path(value):
             # return 404 so we don't reveal the existence of repos that the user
             # is not authorized for
-            raise exceptions.HTTPError(httplib.UNAUTHORIZED)
+            raise exceptions.HTTPError(httplib.NOT_FOUND)
 
 
 def authorize_name(func):

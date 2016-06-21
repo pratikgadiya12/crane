@@ -1,6 +1,6 @@
 {# _crane/templates/repositories.html_ #}
 {% extends "layout.html" %}
-{% block title %}Repositories {% endblock %}
+{% block title %} V2 Repositories {% endblock %}
 {% block body %}
     <div class="container-fluid">
       <div class="row">
@@ -10,6 +10,7 @@
           <h3><strong>Repository id: </strong>{{ repo_name }}</h3>
             <h3><strong>Protected: </strong>{{ repo_info.protected }}</h3>
           </div>
+          {% if repo_info.tags is defined %}
       <table class="datatable table table-striped table-bordered">
         <thead>
           <tr>
@@ -18,7 +19,6 @@
           </tr>
         </thead>
         <tbody>
-        {% if repo_info.tags is defined %}
           {% for tag, image_id in repo_info.tags.iteritems() %}
           <tr class="gradeX">
             <td>
@@ -29,9 +29,9 @@
               </td>
           </tr>
           {% endfor %}
-        {% endif %}
         </tbody>
       </table>
+          {% endif %}
             <hr>
       {% endfor %}
         </div><!-- /col -->

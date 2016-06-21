@@ -257,29 +257,25 @@ class TestValidateAndTransformRepoName(unittest.TestCase):
         self.assertEquals(assertion.exception.status_code, httplib.NOT_FOUND)
 
 
-class TestValidateGetRepositories(unittest.TestCase):
+class TestValidateGetV2Repositories(unittest.TestCase):
 
-    @mock.patch('crane.app_util.get_data')
-    def test_get_repositories(self, mock_get_data):
-        repo = V1Repo(url="",
-                      images_json="[{\"id\": \"test-image1\"}, {\"id\": \"test-image2\"}]",
-                      tags_json="{\"tag1\": \"test-image1\"}",
+    @mock.patch('crane.app_util.get_v2_data')
+    def test_get_V2_repositories_(self, mock_get_data):
+        repo = V2Repo(url="",
                       url_path="",
                       protected=False)
         mock_get_data.return_value = {'repos': {"test-repo": repo}}
-        ret = app_util.get_repositories()
-        self.assertEqual(ret['test-repo']['image_ids'], ['test-image1', 'test-image2'])
-        self.assertEqual(ret['test-repo']['tags'], {'tag1': 'test-image1'})
+        ret = app_util.get_v2_repositories()
         self.assertEqual(ret['test-repo']['protected'], False)
 
-    @mock.patch('crane.app_util.get_data')
-    def test_get_repositories_empty(self, mock_get_data):
+    @mock.patch('crane.app_util.get_v2_data')
+    def test_get_v2_repositories_empty(self, mock_get_data):
         mock_get_data.return_value = {'repos': {}}
-        ret = app_util.get_repositories()
+        ret = app_util.get_v2_repositories()
         self.assertEqual(ret, {})
 
     @mock.patch('crane.app_util.get_v2_data')
-    def test_get_repositories(self, mock_get_v2_data):
+    def test_v2_get_repositories(self, mock_get_v2_data):
         repo = V2Repo(url="",
                       url_path="",
                       protected=False)
@@ -288,7 +284,42 @@ class TestValidateGetRepositories(unittest.TestCase):
         self.assertEqual(ret['test-repo']['protected'], False)
 
     @mock.patch('crane.app_util.get_v2_data')
-    def test_get_repositories_empty(self, mock_get_v2_data):
+    def test_get_v2_repositories_empty(self, mock_get_v2_data):
         mock_get_v2_data.return_value = {'repos': {}}
         ret = app_util.get_v2_repositories()
         self.assertEqual(ret, {})
+
+    class TestValidateGetRepositories(unittest.TestCase):
+        @mock.patch('crane.app_util.get_data')
+        def test_get_repositories(self, mock_get_data):
+            repo = V1Repo(url="",
+                          images_json="[{\"id\": \"test-image1\"}, {\"id\": \"test-image2\"}]",
+                          tags_json="{\"tag1\": \"test-image1\"}",
+                          url_path="",
+                          protected=False)
+            mock_get_data.return_value = {'repos': {"test-repo": repo}}
+            ret = app_util.get_repositories()
+            self.assertEqual(ret['test-repo']['image_ids'], ['test-image1', 'test-image2'])
+            self.assertEqual(ret['test-repo']['tags'], {'tag1': 'test-image1'})
+            self.assertEqual(ret['test-repo']['protected'], False)
+
+        @mock.patch('crane.app_util.get_data')
+        def test_get_repositories_empty(self, mock_get_data):
+            mock_get_data.return_value = {'repos': {}}
+            ret = app_util.get_repositories()
+            self.assertEqual(ret, {})
+
+        @mock.patch('crane.app_util.get_v2_data')
+        def test_get_repositories(self, mock_get_v2_data):
+            repo = V2Repo(url="",
+                          url_path="",
+                          protected=False)
+            mock_get_v2_data.return_value = {'repos': {"test-repo": repo}}
+            ret = app_util.get_v2_repositories()
+            self.assertEqual(ret['test-repo']['protected'], False)
+
+        @mock.patch('crane.app_util.get_v2_data')
+        def test_get_repositories_empty(self, mock_get_v2_data):
+            mock_get_v2_data.return_value = {'repos': {}}
+            ret = app_util.get_v2_repositories()
+            self.assertEqual(ret, {})

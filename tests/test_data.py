@@ -86,7 +86,7 @@ class TestLoadAll(unittest.TestCase):
         self.assertTrue(isinstance(data.v2_response_data['repos'].get('bar'), data.V2Repo))
         # spot-check a value
         self.assertEqual(data.v2_response_data['repos'].get('bar').url,
-                         'http://cdn.redhat.com/bar/baz/images')
+                         'http://access.redhat.com/webassets/docker/bar/baz/images')
 
     @mock.patch.object(data.logger, 'error', spec_set=True)
     @mock.patch('os.walk', return_value=[

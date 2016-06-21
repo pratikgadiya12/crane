@@ -18,11 +18,9 @@ def repositories():
     :return:    json string containing a list of docker repositories
     :rtype:     basestring
     """
-    repos_json = app_util.get_repositories()
-    repos_json.update(app_util.get_v2_repositories())
-    print repos_json
+    repos_json = app_util.get_v2_repositories()
     if 'Accept' in request.headers and request.headers['Accept'] == 'application/json':
-        response = current_app.make_response(json.dumps(repos_json))
+        response = current_app.make_response(json.dumps(repos_json, sort_keys=True))
         response.headers['Content-Type'] = 'application/json'
         return response
     return render_template("repositories.html", repos_json=repos_json)

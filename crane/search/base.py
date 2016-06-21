@@ -17,17 +17,13 @@ class SearchBackend(object):
     search() method signature and provides other functionality that may be
     useful across different search implementations.
     """
-    def search(self, query, is_v2=False):
+    def search(self, query):
         """
         Searches a backend service based on a given query parameter.
 
         :param query:   a string representing the search input from a user that
                         should be passed through to a search service
         :type  query:   basestring
-
-        :param is_v2:   a boolean representing whether the search originated from V2
-                        endpoint. Default is false
-        :type  is_v2:   bool
 
         :return:    a collection of search results as a generator of
                     SearchResult instances
@@ -85,7 +81,6 @@ class SearchBackend(object):
         except exceptions.HTTPError:
             return False
         return True
-
 
 class HTTPBackend(SearchBackend):
     """
