@@ -290,6 +290,7 @@ def name_is_authorized(name):
         if not cert or not cert.check_path(value):
             # return 404 so we don't reveal the existence of repos that the user
             # is not authorized for
+            logger.info('repo %s is protected and client is not authorized to access it' % value)
             raise exceptions.HTTPError(httplib.NOT_FOUND)
 
 
