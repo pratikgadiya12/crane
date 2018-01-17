@@ -5,8 +5,10 @@
 %endif
 
 # The release number 
-%global release_number 0.1.alpha
+%global release_number 0.2.alpha
 
+# project name
+%global pkg_name crane
 # Create tag for the Source0 and setup
 %global git_tag %{name}-%{version}-%{release_number}
 
@@ -38,7 +40,7 @@ settings.
 
 
 %prep
-%setup -q -n crane-%{git_tag}
+%setup -q -n %{name}-%{version}
 
 
 %build
